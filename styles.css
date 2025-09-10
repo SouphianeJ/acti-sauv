@@ -53,11 +53,11 @@ h3{font-size: 1.125rem}
 /* Logo dans la barre de navigation */
 .brand-logo{
   display:block;
-  height:32px;           /* taille nav mobile */
+  height:72px;           /* taille nav mobile */
   width:auto;
 }
 @media (min-width:900px){
-  .brand-logo{ height:36px; }  /* taille nav desktop */
+  .brand-logo{ height:72px; }  /* taille nav desktop */
 }
 /* Empêcher le fond hover des liens nav d'impacter le logo */
 .brand:hover{ text-decoration:none; }
