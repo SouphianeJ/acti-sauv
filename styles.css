@@ -46,8 +46,22 @@ h3{font-size: 1.125rem}
   border-bottom:1px solid var(--ring); z-index:10;
 }
 .header-inner{display:flex; align-items:center; justify-content:space-between; min-height:64px}
-.brand{font-weight:800; letter-spacing:.2px}
-.brand span{color:var(--primary)}
+.brand{
+  display:inline-flex; align-items:center; gap:8px;
+  font-weight:800; letter-spacing:.2px;
+}
+/* Logo dans la barre de navigation */
+.brand-logo{
+  display:block;
+  height:32px;           /* taille nav mobile */
+  width:auto;
+}
+@media (min-width:900px){
+  .brand-logo{ height:36px; }  /* taille nav desktop */
+}
+/* Empêcher le fond hover des liens nav d'impacter le logo */
+.brand:hover{ text-decoration:none; }
+
 .nav{display:flex; gap:16px; align-items:center}
 .nav a{padding:10px 12px; border-radius:10px}
 .nav a:hover{background:var(--surface); text-decoration:none}
