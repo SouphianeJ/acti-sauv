@@ -279,3 +279,26 @@ if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     init();
   }
 })();
+
+// === Décalage auto des ancres pour header sticky ===
+(function(){
+  function setHeaderOffset(){
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+    const gap = 12; // petit espace pour ne pas coller le titre au header
+    const h = Math.ceil(header.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--header-h', (h + gap) + 'px');
+  }
+
+  // Init + MAJ sur resize / chargement des polices
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setHeaderOffset);
+  } else {
+    setHeaderOffset();
+  }
+  window.addEventListener('load', setHeaderOffset);
+  window.addEventListener('resize', setHeaderOffset);
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(setHeaderOffset).catch(()=>{});
+  }
+})();
