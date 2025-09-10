@@ -157,10 +157,10 @@
             <ul class="list">
               <li>Contenus spécifiques (événements, publics…)</li>
               <li>Adaptation aux contraintes terrain.</li>
-              <li>Me contacter pour étudier votre besoin.</li>
+              <li>Me contacter pour trouver ensemble la solution qui vous conviendra.</li>
             </ul>
             <div class="card-cta">
-              <a href="#contact" class="btn btn-secondary">Parler de votre besoin</a>
+              <a href="#contact" class="btn btn-secondary">Parlons de votre besoin</a>
             </div>
           </article>
         </div>
@@ -205,26 +205,8 @@
       <div class="container">
         <h2>Images de formation</h2>
         <p class="muted small">Photos prises lors de sessions (publiées avec accord).</p>
-        <div class="gallery" role="list">
-          <!-- <a href="assets/gallery-1.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-1.jpg" alt="Exercice de RCP sur mannequin" loading="lazy" width="600" height="400">
-          </a>
-          <a href="assets/gallery-2.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-2.jpg" alt="Position latérale de sécurité" loading="lazy" width="600" height="400">
-          </a>
-          <a href="assets/gallery-3.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-3.jpg" alt="Utilisation d’un DAE de formation" loading="lazy" width="600" height="400">
-          </a>
-          <a href="assets/gallery-4.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-4.jpg" alt="Traitement d’une brûlure avec pansement" loading="lazy" width="600" height="400">
-          </a>
-          <a href="assets/gallery-5.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-5.jpg" alt="Mise en sécurité de la zone" loading="lazy" width="600" height="400">
-          </a>
-          <a href="assets/gallery-6.jpg" class="gallery-item" role="listitem">
-            <img src="assets/gallery-6.jpg" alt="Brief sécurité avant atelier pratique" loading="lazy" width="600" height="400">
-          </a> -->
-        </div>
+        <div class="gallery" id="gallery" role="list" data-gallery-path="assets/formation/"></div>
+        <noscript><p class="muted small">Activez JavaScript pour afficher la galerie.</p></noscript>
       </div>
     </section>
 
@@ -299,6 +281,69 @@
       <a class="back-to-top" href="#top">Haut de page ↑</a>
     </div>
   </footer>
+
+    <!-- Modale : Programme SST Initiale -->
+  <div id="modal-initiale" class="modal" role="dialog" aria-modal="true"
+       aria-labelledby="modal-initiale-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <button class="close" data-modal-close aria-label="Fermer">Fermer ×</button>
+      <h3 id="modal-initiale-title">Programme — SST Initiale (14&nbsp;h / 2&nbsp;jours)</h3>
+      <div class="modal-body">
+        <ul class="list-tight">
+          <li>Cadre du dispositif SST, rôle du sauveteur et articulation avec les secours.</li>
+          <li>Protéger&nbsp;: sécurisation de la zone, analyse rapide des dangers.</li>
+          <li>Examiner la victime&nbsp;: conscience, respiration, saignement, douleur.</li>
+          <li>Faire alerter / Alerter efficacement selon l’organisation interne.</li>
+          <li>Secourir&nbsp;: conduite à tenir face à l’hémorragie (compression, garrot si nécessaire).</li>
+          <li>Obstruction aiguë des voies aériennes&nbsp;: gestes adaptés (adulte).</li>
+          <li>Malaise&nbsp;: signes d’alerte, surveillance et transmission d’informations.</li>
+          <li>Plaies et brûlures&nbsp;: refroidissement, protection, pansements.</li>
+          <li>Traumatismes (membres/rachis)&nbsp;: immobilisation et surveillance.</li>
+          <li>Perte de connaissance&nbsp;: mise sur le côté en sécurité (PLS).</li>
+          <li>Arrêt cardiorespiratoire&nbsp;: RCP adulte et utilisation du DAE de formation.</li>
+          <li>Prévention&nbsp;: repérer les situations dangereuses et proposer des actions simples.</li>
+          <li>Adaptation aux risques spécifiques de votre activité (exemples terrain).</li>
+          <li>Mises en situation réalistes, débriefings pédagogiques.</li>
+          <li>Évaluations certificatives selon le référentiel INRS (critères nationaux).</li>
+          <li>Traçabilité et attestation individuelle en fin de session.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-secondary" href="#contact" data-modal-close>Demander un devis</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale : Programme SST Recyclage (MAC) -->
+  <div id="modal-recyclage" class="modal" role="dialog" aria-modal="true"
+       aria-labelledby="modal-recyclage-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <button class="close" data-modal-close aria-label="Fermer">Fermer ×</button>
+      <h3 id="modal-recyclage-title">Programme — SST Recyclage (MAC) (7&nbsp;h / 1&nbsp;jour)</h3>
+      <div class="modal-body">
+        <ul class="list-tight">
+          <li>Actualisation des compétences selon les dernières recommandations.</li>
+          <li>Retours d’expérience et analyse d’incidents du quotidien.</li>
+          <li>Révision&nbsp;: protéger, examiner, faire alerter / alerter, secourir.</li>
+          <li>Hémorragies&nbsp;: rappels et entraînement (compression, garrot).</li>
+          <li>Obstruction des voies aériennes&nbsp;: conduite à tenir adulte.</li>
+          <li>Malaise&nbsp;: évaluation rapide et surveillance.</li>
+          <li>Plaies / brûlures&nbsp;: protocoles de prise en charge actualisés.</li>
+          <li>Traumatismes&nbsp;: gestes essentiels et points de vigilance.</li>
+          <li>Perte de connaissance (PLS) et surveillance continue.</li>
+          <li>Arrêt cardiorespiratoire&nbsp;: RCP adulte  DAE (drills chronométrés).</li>
+          <li>Prévention des risques&nbsp;: observation d’une situation de travail.</li>
+          <li>Actualisation des risques spécifiques de votre établissement.</li>
+          <li>Scénarios contextualisés et évaluations continues.</li>
+          <li>Validation MAC et maintien de la validité du certificat.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-secondary" href="#contact" data-modal-close>Demander un devis</a>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Lightbox pour la galerie -->
   <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Agrandissement de l’image" aria-hidden="true">

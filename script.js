@@ -80,3 +80,202 @@ if (yearSpan) yearSpan.textContent = new Date().getFullYear();
   (lb) && lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb && lb.classList.contains('open')) closeLb(); });
 })();
+
+// === Modales (Programme de formation) ===
+(function(){
+  const focusableSelector = [
+    'a[href]', 'button:not([disabled])', 'textarea:not([disabled])',
+    'input:not([disabled])', 'select:not([disabled])', '[tabindex]:not([tabindex="-1"])'
+  ].join(',');
+
+  let lastFocused = null;
+
+  function openModal(modal){
+    if (!modal) return;
+    lastFocused = document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    // Focus le premier élément actionnable
+    const first = modal.querySelector(focusableSelector) || modal;
+    (first instanceof HTMLElement) && first.focus();
+  }
+
+  function closeModal(modal){
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  // Délégation : ouverture
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-modal-target]');
+    if (!trigger) return;
+    e.preventDefault();
+    const sel = trigger.getAttribute('data-modal-target');
+    const modal = sel ? document.querySelector(sel) : null;
+    openModal(modal);
+  });
+
+  // Délégation : fermeture par bouton
+  document.addEventListener('click', (e) => {
+    const btnClose = e.target.closest('[data-modal-close]');
+    if (!btnClose) return;
+    const modal = e.target.closest('.modal');
+    closeModal(modal);
+  });
+
+  // Fermeture en cliquant l’overlay (en dehors du .modal-dialog)
+  document.addEventListener('mousedown', (e) => {
+    const modal = e.target.closest('.modal');
+    if (!modal) return;
+    const dialog = e.target.closest('.modal-dialog');
+    if (!dialog) { // clic sur l’overlay
+      closeModal(modal);
+    }
+  });
+
+  // Échap et tab trap
+  document.addEventListener('keydown', (e) => {
+    const openModalEl = document.querySelector('.modal.open');
+    if (!openModalEl) return;
+
+    if (e.key === 'Escape'){
+      e.preventDefault();
+      closeModal(openModalEl);
+      return;
+    }
+    if (e.key === 'Tab'){
+      // Focus trap
+      const focusables = Array.from(openModalEl.querySelectorAll(focusableSelector))
+        .filter(el => el.offsetParent !== null || getComputedStyle(el).position === 'fixed');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const current = document.activeElement;
+      if (e.shiftKey){
+        if (current === first || !openModalEl.contains(current)){
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (current === last){
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+})();
+
+
+// === Galerie auto depuis /assets/formation ===
+(function(){
+  const gallery = document.querySelector('#images .gallery#gallery') || document.querySelector('#images .gallery');
+  if (!gallery) return;
+
+  const basePathAttr = gallery.getAttribute('data-gallery-path') || 'assets/formation/';
+  const basePath = basePathAttr.endsWith('/') ? basePathAttr : (basePathAttr + '/');
+  const IMG_EXT_RE = /\.(avif|webp|jpg|jpeg|png|gif|bmp|svg)$/i;
+
+  // 1) Tente de charger un manifest JSON facultatif : assets/formation/index.json
+  async function tryManifest(){
+    try{
+      const res = await fetch(basePath + 'index.json', { cache: 'no-store' });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return normalizeList(data);
+    }catch(e){ return null; }
+  }
+
+  // 2) Repli : tente de parser l’auto-index HTML du dossier (si activé côté serveur)
+  async function tryAutoIndex(){
+    try{
+      const res = await fetch(basePath, { cache: 'no-store' });
+      if (!res.ok) return null;
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const hrefs = Array.from(doc.querySelectorAll('a'))
+        .map(a => a.getAttribute('href') || '')
+        .filter(h => IMG_EXT_RE.test(h));
+      return normalizeList(hrefs);
+    }catch(e){ return null; }
+  }
+
+  // Transforme divers formats (array de strings, array d’objets) => [{url,title}]
+  function normalizeList(input){
+    if (!input) return [];
+    const arr = Array.isArray(input) ? input
+      : (Array.isArray(input.files) ? input.files : []);
+
+    return arr.map(item => {
+      let file = '';
+      let title = '';
+      if (typeof item === 'string'){
+        file = item;
+      } else if (item && typeof item === 'object'){
+        file = item.file || item.name || '';
+        title = item.title || '';
+      }
+      if (!file) return null;
+
+      const isAbsolute = /^(https?:)?\/\//i.test(file) || file.startsWith('/');
+      const url = isAbsolute ? file : (basePath + file.replace(/^\.?\//, ''));
+      const derived = title || fileNameToTitle(file);
+      return { url, title: derived };
+    }).filter(Boolean);
+  }
+
+  function fileNameToTitle(file){
+    try{
+      const name = file.split('/').pop().replace(/\.[^.]+$/, '');
+      return name.replace(/[-_]+/g, ' ').trim();
+    }catch(e){ return ''; }
+  }
+
+  function render(items){
+    if (!items || !items.length) return;
+    const frag = document.createDocumentFragment();
+    items.forEach(({ url, title }) => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.className = 'gallery-item';
+      a.setAttribute('role', 'listitem');
+      if (title) a.title = title;
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.loading = 'lazy';
+      img.alt = title || '';
+      img.width = 600;
+      img.height = 400;
+
+      a.appendChild(img);
+      frag.appendChild(a);
+    });
+    gallery.appendChild(frag);
+  }
+
+  async function init(){
+    // Essaie manifest.json puis auto-index
+    let items = await tryManifest();
+    if (!items || !items.length){
+      items = await tryAutoIndex();
+    }
+    // Si rien trouvé, on ne rend rien (galerie vide, pas de texte comme demandé)
+    if (items && items.length){
+      render(items);
+    } else {
+      console.warn('[Galerie] Aucune image trouvée dans', basePath);
+    }
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
